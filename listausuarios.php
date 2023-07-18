@@ -1,3 +1,10 @@
+<?php
+require 'conexao.php';
+$query = "SELECT * FROM usuarios";
+$data = mysqli_query($conexao, $query);
+?>
+
+
 <!doctype html>
 <html lang="pt-br">
   <head>
@@ -6,6 +13,22 @@
     <title>Lista de usuários</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+      .senha {
+        max-width: 200px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      input {
+        width: 70%;
+      }
+
+
+
+    </style> 
+  
   </head>
   <body>
     <nav class="navbar bg-dark border-bottom border-bottom-dark p-3" data-bs-theme="dark">
@@ -22,35 +45,38 @@
                 <th scope="col">Telefone</th>
                 <th scope="col">Idade</th>
                 <th scope="col">Senha</th>
-                <th scope="col">Ações</th>
+                <th scope="col" colspan="2">Ações</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr class="align-middle">
-                <th scope="row">1</th>
-                <td>Eduardo</td>
-                <td>eduardowisch0902@gmail.com</td>
-                <td>(44)998248879</td>
-                <td>16</td>
-                <td>244466666</td>
-                <td>
+              <?php
+                while($usuario = mysqli_fatch_array($data)){
+              ?>
+               <tr class="align-middle  text-center">
+                  <form action="atualiza.php" method="POST">
+                  <th scope="row"><input type="hidden" name="id" value="<?php echo $usuario['id'] ?>"><?php echo $usuario['id'] ?></th>
+                  <td><input type="text" name="nome" value="<?php echo $usuario['id'] ?>"></td>
+                  <td><input type="email" name="email" id="email" value="<?php echo $usuario['email'] ?>"></td>
+                  <td class="senha"><input type="text" name="senha" value="<?php echo $usuario['senha'] ?>"></td>
+                  <td><input type="text" name="telefone" value="<?php echo $usuario['telefone'] ?>"></td>
+                  <td><input type="number" name="idade" id="idade" value="<?php echo $usuario['idade'] ?>"></td>
+                  <td id="actions">
                     <button type="button" class="btn btn-primary p-2 d-inline-flex align-items-center gap-2"><i class="fa-regular fa-pen-to-square"></i>Editar</button>
-                    <button type="button" class="btn btn-danger p-2 d-inline-flex align-items-center gap-2"><i class="fa-solid fa-trash"></i>Deletar</button>
+                </td>
+              </form>
+                <td>
+                <form action="deleta.php" method="post">
+                    <input type="hidden" name="id" value="<?php echo $usuario['id'] ?>">
+                    <button type="submit" class="btn btn-danger p-2 d-inline-flex align-items-center gap-2"><i class="fa-solid fa-trash"></i>Deletar</button>
+                    </form>
                 </td>
               </tr>
 
-              <tr class="align-middle">
-                <th scope="row">1</th>
-                <td>Lucas</td>
-                <td>lucas@gmail.com</td>
-                <td>(44)998887776</td>
-                <td>22</td>
-                <td>123456</td>
-                <td>
-                    <button type="button" class="btn btn-primary p-2 d-inline-flex align-items-center gap-2"><i class="fa-regular fa-pen-to-square"></i>Editar</button>
-                    <button type="button" class="btn btn-danger p-2 d-inline-flex align-items-center gap-2"><i class="fa-solid fa-trash"></i>Deletar</button>
-                </td>
-              </tr>
+              <?php
+                }
+              ?>
+              
             </tbody>
           </table>
       </div>
